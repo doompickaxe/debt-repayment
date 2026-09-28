@@ -5,7 +5,7 @@ import java.util.List;
 
 public record RepaymentPlan(List<RepaymentPlanItem> plan, RepaymentSummary summary) {
 
-    public record RepaymentPlanItem(int month, BigDecimal instalment, BigDecimal interest, BigDecimal remainingDebt) {
+    public record RepaymentPlanItem(int month, BigDecimal instalment, BigDecimal interest, BigDecimal repayment, BigDecimal remainingDebt) {
     }
 
     public record RepaymentSummary(BigDecimal remainingDebt,

@@ -27,6 +27,22 @@ class DebtRepaymentServiceTest {
         assertThat(result, notNullValue());
         assertThat(result.plan(), notNullValue());
         assertThat(result.summary(), notNullValue());
+
+        var plan = result.plan();
+        assertThat(plan.size(), equalTo(120));
+        var firstMonth = plan.getFirst();
+        assertThat(firstMonth.month(), equalTo(1));
+        assertThat(firstMonth.instalment(), equalTo(new BigDecimal("343.33")));
+        assertThat(firstMonth.repayment(), equalTo(new BigDecimal("166.66")));
+        assertThat(firstMonth.interest(), equalTo(new BigDecimal("176.67")));
+        assertThat(firstMonth.remainingDebt(), equalTo(new BigDecimal("99833.34")));
+
+        var lastMonth = plan.getLast();
+        assertThat(lastMonth.month(), equalTo(120));
+        assertThat(lastMonth.instalment(), equalTo(new BigDecimal("343.33")));
+        assertThat(lastMonth.interest(), equalTo(new BigDecimal("137.71")));
+        assertThat(lastMonth.repayment(), equalTo(new BigDecimal("205.62")));
+        assertThat(lastMonth.remainingDebt(), equalTo(new BigDecimal("77744.14")));
     }
 
     @Test
