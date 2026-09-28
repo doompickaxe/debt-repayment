@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.25.0",
+    "generators": {
+      "api": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "../openapi/debt-repayment-api.yaml",
+        "output": "src/app/api",
+        "additionalProperties": {
+          "ngVersion": "22.0.0",
+          "providedIn": "root",
+          "fileNaming": "kebab-case",
+          "supportsES6": true,
+          "stringEnums": true,
+          "enumPropertyNaming": "original"
+        }
+      }
+    }
+  }
+}

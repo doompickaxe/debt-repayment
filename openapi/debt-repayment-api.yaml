@@ -1,0 +1,40 @@
+openapi: 3.1.0
+info:
+  title: Debt Repayment API
+  version: 0.1.0
+  description: |
+    Single source of truth for the Debt Repayment API.
+    The Quarkus server interfaces and the Angular client are generated from this file.
+servers:
+  - url: /api
+tags:
+  - name: status
+    description: Service health and metadata
+paths:
+  /status:
+    get:
+      tags: [status]
+      operationId: getStatus
+      summary: Returns the current service status
+      responses:
+        '200':
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+components:
+  schemas:
+    Status:
+      type: object
+      required: [status, version, timestamp]
+      properties:
+        status:
+          type: string
+          enum: [UP, DOWN]
+        version:
+          type: string
+          example: 0.1.0
+        timestamp:
+          type: string
+          format: date-time

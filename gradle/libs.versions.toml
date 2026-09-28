@@ -1,0 +1,19 @@
+[versions]
+quarkus = "3.39.5"
+quinoa = "2.9.1"
+openapi-generator = "7.25.0"
+
+[libraries]
+quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
+quarkus-rest = { module = "io.quarkus:quarkus-rest" }
+quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
+quarkus-hibernate-validator = { module = "io.quarkus:quarkus-hibernate-validator" }
+quarkus-smallrye-openapi = { module = "io.quarkus:quarkus-smallrye-openapi" }
+quarkus-arc = { module = "io.quarkus:quarkus-arc" }
+quarkus-junit = { module = "io.quarkus:quarkus-junit" }
+quinoa = { module = "io.quarkiverse.quinoa:quarkus-quinoa", version.ref = "quinoa" }
+rest-assured = { module = "io.rest-assured:rest-assured" }
+
+[plugins]
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }

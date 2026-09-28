@@ -1,0 +1,10 @@
+<main>
+  <h1>Debt Repayment</h1>
+  @if (status(); as s) {
+    <p>Backend {{ s.status }} · v{{ s.version }} · {{ s.timestamp }}</p>
+  } @else {
+    <p>Connecting to backend…</p>
+  }
+</main>
+
+<router-outlet />
