@@ -2,7 +2,6 @@ package com.example.debtrepayment.service;
 
 import com.example.debtrepayment.model.DebtRepaymentInput;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import org.junit.jupiter.api.Test;
 
@@ -38,19 +37,19 @@ class DebtRepaymentServiceTest {
 
         input = BigDecimal.ONE;
         result = service.calculateQ(input);
-        assertThat(result, equalTo(BigDecimal.ONE));
+        assertThat(result.setScale(3, RoundingMode.HALF_UP), equalTo(new BigDecimal("1.083")));
 
         input = BigDecimal.TEN;
         result = service.calculateQ(input);
-        assertThat(result, equalTo(BigDecimal.valueOf(2)));
+        assertThat(result.setScale(3, RoundingMode.HALF_UP), equalTo(new BigDecimal("1.833")));
 
         input = new BigDecimal("0.0212");
         result = service.calculateQ(input);
-        assertThat(result, equalTo(new BigDecimal("1.0018")));
+        assertThat(result.setScale(5, RoundingMode.HALF_UP), equalTo(new BigDecimal("1.00177")));
 
-        input = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100), RoundingMode.HALF_EVEN);
+        input = BigDecimal.valueOf(1).movePointLeft(2);
         result = service.calculateQ(input);
-        assertThat(result, equalTo(BigDecimal.ONE));
+        assertThat(result.setScale(5, RoundingMode.HALF_UP), equalTo(new BigDecimal("1.00083")));
     }
 
     @Test
@@ -68,6 +67,6 @@ class DebtRepaymentServiceTest {
 
         month = 2;
         result = service.calculateRepaymentForMonth(input, month);
-        assertThat(result.setScale(2, RoundingMode.HALF_EVEN), equalTo(new BigDecimal("166.97")));
+        assertThat(result.setScale(2, RoundingMode.HALF_EVEN), equalTo(new BigDecimal("166.96")));
     }
 }

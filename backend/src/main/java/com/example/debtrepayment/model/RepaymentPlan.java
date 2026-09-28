@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record RepaymentPlan(List<RepaymentPlanItem> plan, RepaymentSummary summary) {
-}
 
-record RepaymentPlanItem(int month, BigDecimal instalment, BigDecimal interest, BigDecimal debt) {
-}
+    public record RepaymentPlanItem(int month, BigDecimal instalment, BigDecimal interest, BigDecimal remainingDebt) {
+    }
 
-record RepaymentSummary(BigDecimal totalInterest, BigDecimal totalDebt) {
+    public record RepaymentSummary(BigDecimal remainingDebt,
+                                   BigDecimal totalInterest,
+                                   BigDecimal totalInstalments,
+                                   BigDecimal totalRepayments) {
+    }
 }
