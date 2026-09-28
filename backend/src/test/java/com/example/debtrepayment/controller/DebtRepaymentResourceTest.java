@@ -1,4 +1,4 @@
-package com.example.debtrepayment;
+package com.example.debtrepayment.controller;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
