@@ -48,6 +48,8 @@ openApiGenerate {
         "dateLibrary" to "java8",
         "sourceFolder" to "src/main/java",
         "hideGenerationTimestamp" to "true",
+        // Let missing required fields reach Bean Validation instead of failing in Jackson
+        "generateJsonCreator" to "false",
     )
 }
 

@@ -1,0 +1,89 @@
+package com.example.debtrepayment;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+
+@QuarkusTest
+class DebtRepaymentResourceTest {
+
+    @Test
+    void acceptsValidRequest() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"loanAmount": 100000, "annualInterestRate": 2.12, "loanPeriodYears": 10, "initialRepaymentRate": 2}
+                        """)
+                .when().post("/api/debt-repayment")
+                .then()
+                .statusCode(200)
+                .body("parameters.loanAmount", is(100000))
+                .body("parameters.loanPeriodYears", is(10));
+    }
+
+    @Test
+    void rejectsInvalidRequest() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"loanAmount": -1, "annualInterestRate": 2.12, "loanPeriodYears": 0}
+                        """)
+                .when().post("/api/debt-repayment")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("VALIDATION_ERROR"))
+                .body("message", allOf(
+                        containsString("loanAmount"),
+                        containsString("loanPeriodYears"),
+                        containsString("initialRepaymentRate")));
+    }
+
+    @Test
+    void rejectsMissingBody() {
+        given()
+                .contentType(ContentType.JSON)
+                .when().post("/api/debt-repayment")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("VALIDATION_ERROR"));
+    }
+
+    @Test
+    void rejectsWronglyTypedValue() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"loanAmount": "lots", "annualInterestRate": 2.12, "loanPeriodYears": 10, "initialRepaymentRate": 2}
+                        """)
+                .when().post("/api/debt-repayment")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("INVALID_REQUEST_BODY"));
+    }
+
+    @Test
+    void rejectsMalformedBody() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("{\"loanAmount\": \"lots\"")
+                .when().post("/api/debt-repayment")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("INVALID_REQUEST_BODY"))
+                .body("message", notNullValue());
+    }
+
+    @Test
+    void servesOpenApiSpec() {
+        given()
+                .when().get("/q/openapi")
+                .then()
+                .statusCode(200);
+    }
+}

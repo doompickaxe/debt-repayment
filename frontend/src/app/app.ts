@@ -1,7 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { StatusService } from './api';
 
 @Component({
   imports: [RouterOutlet],
@@ -9,6 +7,4 @@ import { StatusService } from './api';
   styleUrl: './app.scss',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly status = toSignal(inject(StatusService).getStatus());
-}
+export class App {}

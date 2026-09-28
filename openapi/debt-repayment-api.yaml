@@ -8,33 +8,140 @@ info:
 servers:
   - url: /api
 tags:
-  - name: status
-    description: Service health and metadata
+  - name: debt-repayment
+    description: Calculation of monthly repayment schedules
 paths:
-  /status:
-    get:
-      tags: [status]
-      operationId: getStatus
-      summary: Returns the current service status
+  /debt-repayment:
+    post:
+      tags: [debt-repayment]
+      operationId: calculateDebtRepayment
+      summary: Calculates the monthly repayment schedule of a loan
+      description: |
+        Returns one entry per month over the loan period, showing how the debt
+        develops with a constant monthly instalment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DebtRepaymentRequest'
       responses:
         '200':
-          description: Service is up
+          description: Input parameters, monthly repayment schedule and its summary
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Status'
+                $ref: '#/components/schemas/DebtRepaymentResponse'
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
-    Status:
+    DebtRepaymentRequest:
       type: object
-      required: [status, version, timestamp]
+      required: [loanAmount, annualInterestRate, loanPeriodYears, initialRepaymentRate]
       properties:
-        status:
+        loanAmount:
+          type: number
+          description: Amount paid out to the borrower
+          minimum: 0.01
+          example: 100000
+        annualInterestRate:
+          type: number
+          description: Yearly (nominal) interest rate in percent
+          minimum: 0
+          example: 2.12
+        loanPeriodYears:
+          type: integer
+          format: int32
+          description: Period of the loan in years
+          minimum: 1
+          maximum: 100
+          example: 10
+        initialRepaymentRate:
+          type: number
+          description: Yearly redemption rate in percent of the loan amount
+          minimum: 0.01
+          example: 2
+
+    DebtRepaymentResponse:
+      type: object
+      required: [parameters, schedule, summary]
+      properties:
+        parameters:
+          $ref: '#/components/schemas/DebtRepaymentRequest'
+          description: Input parameters the schedule was calculated with
+        schedule:
+          type: array
+          description: Repayment schedule, ordered by month
+          items:
+            $ref: '#/components/schemas/RepaymentScheduleEntry'
+        summary:
+          $ref: '#/components/schemas/RepaymentSummary'
+    RepaymentSummary:
+      type: object
+      description: Totals over the whole repayment schedule
+      required: [remainingDebt, totalInterest, totalRepayment, totalInstalments]
+      properties:
+        remainingDebt:
+          type: number
+          description: Remaining debt at the end of the loan period
+          example: 77744.14
+        totalInterest:
+          type: number
+          description: Sum of the interest paid over the loan period
+          example: 18943.74
+        totalRepayment:
+          type: number
+          description: Sum of the debt paid off over the loan period (without interest)
+          example: 22255.86
+        totalInstalments:
+          type: number
+          description: Sum of all instalments paid over the loan period (interest + repayment)
+          example: 41199.60
+    ErrorResponse:
+      type: object
+      required: [errorCode, message]
+      properties:
+        errorCode:
           type: string
-          enum: [UP, DOWN]
-        version:
+          description: |
+            Machine-readable error code:
+            * `VALIDATION_ERROR`: a parameter is missing or outside its allowed range
+            * `INVALID_REQUEST_BODY`: the request body is not valid JSON or has wrongly typed values
+          example: VALIDATION_ERROR
+        message:
           type: string
-          example: 0.1.0
-        timestamp:
-          type: string
-          format: date-time
+          description: Human-readable description of the error
+          example: 'loanAmount: must be greater than or equal to 0.01'
+    RepaymentScheduleEntry:
+      type: object
+      description: One row of the repayment schedule. Amounts are for the given month.
+      required: [month, remainingDebt, interest, repayment, instalment]
+      properties:
+        month:
+          type: integer
+          format: int32
+          description: Month of the loan period, starting at 1
+          minimum: 1
+          example: 1
+        remainingDebt:
+          type: number
+          description: Remaining debt at the end of the month
+          example: 99833.34
+        interest:
+          type: number
+          description: Interest paid in this month
+          example: 176.67
+        repayment:
+          type: number
+          description: Part of the instalment that reduces the debt in this month
+          example: 166.66
+        instalment:
+          type: number
+          description: Total amount paid in this month (interest + repayment)
+          example: 343.33

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "generate:api": "openapi-generator-cli generate --generator-key api",
+    "generate:api": "node -e \"require('fs').rmSync('src/app/api',{recursive:true,force:true})\" && openapi-generator-cli generate --generator-key api",
     "start": "yarn generate:api && ng serve",
     "build": "yarn generate:api && ng build",
     "watch": "yarn generate:api && ng build --watch --configuration development",
