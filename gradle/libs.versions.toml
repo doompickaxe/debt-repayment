@@ -2,6 +2,7 @@
 quarkus = "3.39.5"
 quinoa = "2.9.1"
 openapi-generator = "7.25.0"
+mapstruct = "1.6.3"
 
 [libraries]
 quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
@@ -13,6 +14,8 @@ quarkus-arc = { module = "io.quarkus:quarkus-arc" }
 quarkus-junit = { module = "io.quarkus:quarkus-junit" }
 quinoa = { module = "io.quarkiverse.quinoa:quarkus-quinoa", version.ref = "quinoa" }
 rest-assured = { module = "io.rest-assured:rest-assured" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 
 [plugins]
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }

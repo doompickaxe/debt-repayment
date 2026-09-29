@@ -1,0 +1,26 @@
+Prompts written in the Claude Code chat for this project
+=========================================================
+
+1.
+Create a monorepo that combines a Quarkus backend which serves an Angular frontend. The Quarkus backend should use the latest Java 25 with Gradle. It should also be the latest Angular with yarn.
+Additionally, I would like to have a openapi specification which generates the API for the backend as well as a client for the frontend.
+
+2.
+This project is a calculator to showcase how a debt develops with repayments each month. The user enters 4 pieces of information: The amount of the payout, the yearly interest, period of the loan as well as the percentage of redemption.
+
+Change the openapi specification so that only one POST `/api/debt-repayment` endpoint exists.
+In the request body contains the 4 parameters, while the response body is a list of objects that allows the creation of the table with the columns: Month, Remaining Debt, Amount of paid interest in that month, amount of repayment for that month, instalment.
+
+3.
+Adapt the response body of the endpoint `/api/debt-repayment` that additionally gives information about the input parameters, as well as a summary of the whole table which consists of: final remaining debt, sum of paid interest, sum of paid debt (without interest) and the sum of the paid instalments
+
+4.
+The 400 response should also be an error object with these parameters: errorCode(string), message(string)
+
+5.
+Add a text file which lists all prompts that I have written in this chat
+
+6.
+The service implementation has been written and internal model classes exist as well.
+Implement the DebtRepaymentResource and a mapper using Mapstruct.
+

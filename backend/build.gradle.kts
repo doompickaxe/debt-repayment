@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.quarkus.hibernate.validator)
     implementation(libs.quarkus.smallrye.openapi)
     implementation(libs.quinoa)
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
 
     testImplementation(libs.quarkus.junit)
     testImplementation(libs.rest.assured)
@@ -77,7 +79,7 @@ tasks.processResources {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    options.compilerArgs.add("-parameters")
+    options.compilerArgs.addAll(listOf("-parameters", "-Amapstruct.unmappedTargetPolicy=ERROR"))
 }
 
 tasks.withType<Test> {

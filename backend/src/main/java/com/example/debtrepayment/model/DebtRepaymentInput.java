@@ -8,11 +8,15 @@ public record DebtRepaymentInput(BigDecimal payout,
                                  BigDecimal repaymentRate,
                                  int periodYears) {
 
+    public static final BigDecimal MONTHS_PER_YEAR = BigDecimal.valueOf(12);
+
+    /// Fixed monthly instalment: payout * (i + r) / 12, rounded to cents
     public BigDecimal monthlyInstalment() {
-        return payout.multiply(interestRate.add(repaymentRate)).divide(new BigDecimal("12"), RoundingMode.HALF_EVEN);
+        return payout.multiply(interestRate.add(repaymentRate)).divide(MONTHS_PER_YEAR, 2, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal firstRepaymentAmount() {
-        return payout.multiply(repaymentRate).divide(new BigDecimal("12"), RoundingMode.HALF_EVEN);
+    /// Money is booked in whole cents, rounded commercially (0.005 rounds up)
+    public static BigDecimal toCents(BigDecimal amount) {
+        return amount.setScale(2, RoundingMode.HALF_UP);
     }
 }
