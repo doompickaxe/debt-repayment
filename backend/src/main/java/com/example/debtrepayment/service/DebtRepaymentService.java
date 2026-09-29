@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.example.debtrepayment.model.DebtRepaymentInput.MONTHS_PER_YEAR;
 import static com.example.debtrepayment.model.DebtRepaymentInput.toCents;
@@ -49,17 +48,17 @@ public class DebtRepaymentService {
     }
 
     RepaymentPlan.RepaymentSummary calculateRepaymentSummary(BigDecimal payout, List<RepaymentPlanItem> plan) {
-        var remainingDebt = plan.isEmpty() ? payout : plan.getLast().remainingDebt();
+        var remainingDebt = plan.getLast().remainingDebt();
+        var totalInterest = toCents(BigDecimal.ZERO);
+        var totalInstalments = toCents(BigDecimal.ZERO);
+        var totalRepayments = toCents(BigDecimal.ZERO);
 
-        return new RepaymentPlan.RepaymentSummary(
-            remainingDebt,
-            sum(plan, RepaymentPlanItem::interest),
-            sum(plan, RepaymentPlanItem::instalment),
-            sum(plan, RepaymentPlanItem::repayment)
-        );
-    }
+        for (var item : plan) {
+            totalInterest = totalInterest.add(item.interest());
+            totalInstalments = totalInstalments.add(item.instalment());
+            totalRepayments = totalRepayments.add(item.repayment());
+        }
 
-    private static BigDecimal sum(List<RepaymentPlanItem> plan, Function<RepaymentPlanItem, BigDecimal> column) {
-        return toCents(plan.stream().map(column).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return new RepaymentPlan.RepaymentSummary(remainingDebt, totalInterest, totalInstalments, totalRepayments);
     }
 }
