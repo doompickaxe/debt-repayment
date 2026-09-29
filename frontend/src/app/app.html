@@ -1,5 +1,41 @@
-<main>
-  <h1>Debt Repayment</h1>
-</main>
+<main class="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-8 md:py-12">
+  <header>
+    <h1 class="text-3xl font-semibold tracking-tight">Debt Repayment</h1>
+    <p class="text-muted-foreground mt-1">See how your loan develops month by month with a fixed instalment.</p>
+  </header>
 
-<router-outlet />
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h2 hlmCardTitle>Loan parameters</h2>
+      <p hlmCardDescription>Enter your loan details and calculate the repayment schedule.</p>
+    </div>
+    <div hlmCardContent>
+      <app-debt-repayment-form [loading]="loading()" (calculate)="calculate($event)" />
+    </div>
+  </section>
+
+  @if (error(); as message) {
+    <div hlmAlert variant="destructive">
+      <h3 hlmAlertTitle>Calculation failed</h3>
+      <p hlmAlertDescription>{{ message }}</p>
+    </div>
+  }
+
+  @if (result(); as calculation) {
+    @let r = calculation.response;
+    <section hlmCard>
+      <div hlmCardHeader>
+        <h2 hlmCardTitle>Repayment schedule</h2>
+        <p hlmCardDescription>
+          {{ r.parameters.loanAmount | currency: 'EUR' }} paid out in {{ payoutDate(calculation.payoutMonth) | date: 'MMMM yyyy' }} at {{ r.parameters.annualInterestRate }} % interest and
+          {{ r.parameters.initialRepaymentRate }} % repayment over {{ r.parameters.loanPeriodYears }} years
+          · {{ r.schedule.length }} monthly instalments
+        </p>
+      </div>
+      <div hlmCardContent class="flex flex-col gap-6">
+        <app-repayment-summary [summary]="r.summary" />
+        <app-repayment-table [payout]="r.parameters.loanAmount" [payoutMonth]="calculation.payoutMonth" [schedule]="r.schedule" />
+      </div>
+    </section>
+  }
+</main>

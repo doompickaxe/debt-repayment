@@ -21,6 +21,21 @@ A prompt history will be part of this project.
 | `backend/` | Quarkus 3 (Java 25, Gradle). JAX-RS interfaces and models are generated from the spec into `build/generated/openapi`, and resources implement them. |
 | `frontend/` | Angular 22 (Yarn 4). The `typescript-angular` client is generated from the spec into `src/app/api` (git-ignored). |
 
+### Frontend UI
+
+The UI is built with [spartan/ui](https://spartan.ng), the Angular port of shadcn/ui, styled with Tailwind CSS 4:
+
+* **Brain** (`@spartan-ng/brain`): headless, accessible primitives, installed as an npm dependency.
+* **Helm** (`src/app/ui/*`): the shadcn-styled components. Like shadcn, they are copied into the project so you can edit them, and imported via `@spartan-ng/helm/<name>` (path mapping in `tsconfig.json`).
+
+To add another component, e.g. a select:
+
+```bash
+cd frontend && yarn ng g @spartan-ng/cli:ui select
+```
+
+The theme (CSS variables for light and dark mode) lives in `src/styles.css`. Dark mode follows the system setting.
+
 The backend serves the Angular app via [Quinoa](https://docs.quarkiverse.io/quarkus-quinoa/dev/). During the Gradle build it runs `yarn install` and `yarn build` in `frontend/` and bundles the output. It also handles SPA routing: every path except `/api` and `/q` falls back to `index.html`.
 
 ## Prerequisites

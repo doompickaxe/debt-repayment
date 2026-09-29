@@ -24,3 +24,22 @@ Add a text file which lists all prompts that I have written in this chat
 The service implementation has been written and internal model classes exist as well.
 Implement the DebtRepaymentResource and a mapper using Mapstruct.
 
+7.
+Change the code so that the calculation is done month by month based on each remaining debt each month, so that the rounding differences are fixed
+
+8.
+Change the implementation of calculateRepaymentSummary so that the list is only iterated once
+
+9.
+Let's focus on the frontend now. Implement an Angular frontend with Shadcn as component framework. A user should be able to enter the parameters and calls the backend. Afterwards the response should be presented in a table for the user to scroll through.
+
+10.
+The Quarkus backend should host the angular frontend
+
+11.
+In the frontend show the debt always as a negative number.
+The month should not show simply the month number. Let the user also enter a month/year and show the actual date when the instalment happens, which is the last of each month.
+The first line should print the full payout without any instalment, also as a negative number.
+
+12.
+Add all missing prompts to PROMPT.txt

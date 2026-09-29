@@ -1,0 +1,66 @@
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div hlmFieldGroup class="grid gap-6 sm:grid-cols-2">
+    <div hlmField>
+      <label hlmFieldLabel for="loanAmount">Loan amount</label>
+      <div hlmInputGroup>
+        <input hlmInputGroupInput id="loanAmount" type="number" inputmode="decimal" min="0.01" step="0.01" formControlName="loanAmount" />
+        <div hlmInputGroupAddon align="inline-end"><span hlmInputGroupText>€</span></div>
+      </div>
+      <p hlmFieldDescription>Amount paid out to you</p>
+      <hlm-field-error validator="required">Please enter the loan amount.</hlm-field-error>
+      <hlm-field-error validator="min">The loan amount must be at least 0.01 €.</hlm-field-error>
+    </div>
+
+    <div hlmField>
+      <label hlmFieldLabel for="payoutMonth">Payout month</label>
+      <input hlmInput id="payoutMonth" type="month" formControlName="payoutMonth" />
+      <p hlmFieldDescription>Instalments are due on the last day of each month, starting with this month</p>
+      <hlm-field-error validator="required">Please enter the payout month.</hlm-field-error>
+      <hlm-field-error validator="pattern">Please enter a month and year.</hlm-field-error>
+    </div>
+
+    <div hlmField>
+      <label hlmFieldLabel for="annualInterestRate">Interest rate</label>
+      <div hlmInputGroup>
+        <input hlmInputGroupInput id="annualInterestRate" type="number" inputmode="decimal" min="0" step="0.01" formControlName="annualInterestRate" />
+        <div hlmInputGroupAddon align="inline-end"><span hlmInputGroupText>% p.a.</span></div>
+      </div>
+      <p hlmFieldDescription>Yearly nominal interest rate</p>
+      <hlm-field-error validator="required">Please enter the interest rate.</hlm-field-error>
+      <hlm-field-error validator="min">The interest rate cannot be negative.</hlm-field-error>
+    </div>
+
+    <div hlmField>
+      <label hlmFieldLabel for="loanPeriodYears">Loan period</label>
+      <div hlmInputGroup>
+        <input hlmInputGroupInput id="loanPeriodYears" type="number" inputmode="numeric" min="1" max="100" step="1" formControlName="loanPeriodYears" />
+        <div hlmInputGroupAddon align="inline-end"><span hlmInputGroupText>years</span></div>
+      </div>
+      <p hlmFieldDescription>Between 1 and 100 years</p>
+      <hlm-field-error validator="required">Please enter the loan period.</hlm-field-error>
+      <hlm-field-error validator="min">The loan period must be at least 1 year.</hlm-field-error>
+      <hlm-field-error validator="max">The loan period can be at most 100 years.</hlm-field-error>
+      <hlm-field-error validator="pattern">Please enter whole years.</hlm-field-error>
+    </div>
+
+    <div hlmField>
+      <label hlmFieldLabel for="initialRepaymentRate">Repayment rate</label>
+      <div hlmInputGroup>
+        <input hlmInputGroupInput id="initialRepaymentRate" type="number" inputmode="decimal" min="0.01" step="0.01" formControlName="initialRepaymentRate" />
+        <div hlmInputGroupAddon align="inline-end"><span hlmInputGroupText>% p.a.</span></div>
+      </div>
+      <p hlmFieldDescription>Yearly redemption in percent of the loan amount</p>
+      <hlm-field-error validator="required">Please enter the repayment rate.</hlm-field-error>
+      <hlm-field-error validator="min">The repayment rate must be greater than 0.</hlm-field-error>
+    </div>
+  </div>
+
+  <div class="mt-6 flex justify-end">
+    <button hlmBtn type="submit" [disabled]="loading()">
+      @if (loading()) {
+        <hlm-spinner aria-label="Calculating" />
+      }
+      Calculate
+    </button>
+  </div>
+</form>
