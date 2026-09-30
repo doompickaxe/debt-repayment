@@ -39,7 +39,7 @@ public class DebtRepaymentService {
             plan.add(new RepaymentPlanItem(month, interest.add(repayment), interest, repayment, remainingDebt));
         }
 
-        return new RepaymentPlan(plan, calculateRepaymentSummary(toCents(input.payout()), plan));
+        return new RepaymentPlan(plan, calculateRepaymentSummary(plan));
     }
 
     /// Interest for one month on the given debt, rounded to cents
@@ -47,7 +47,7 @@ public class DebtRepaymentService {
         return toCents(remainingDebt.multiply(interestRate).divide(MONTHS_PER_YEAR, MATH_CONTEXT));
     }
 
-    RepaymentPlan.RepaymentSummary calculateRepaymentSummary(BigDecimal payout, List<RepaymentPlanItem> plan) {
+    private RepaymentPlan.RepaymentSummary calculateRepaymentSummary(List<RepaymentPlanItem> plan) {
         var remainingDebt = plan.getLast().remainingDebt();
         var totalInterest = toCents(BigDecimal.ZERO);
         var totalInstalments = toCents(BigDecimal.ZERO);

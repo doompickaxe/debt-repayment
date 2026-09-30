@@ -12,11 +12,11 @@ public record DebtRepaymentInput(BigDecimal payout,
 
     /// Fixed monthly instalment: payout * (i + r) / 12, rounded to cents
     public BigDecimal monthlyInstalment() {
-        return payout.multiply(interestRate.add(repaymentRate)).divide(MONTHS_PER_YEAR, 2, RoundingMode.HALF_UP);
+        return payout.multiply(interestRate.add(repaymentRate)).divide(MONTHS_PER_YEAR, 2, RoundingMode.HALF_EVEN);
     }
 
-    /// Money is booked in whole cents, rounded commercially (0.005 rounds up)
+    /// Money is booked in whole cents, rounded commercially
     public static BigDecimal toCents(BigDecimal amount) {
-        return amount.setScale(2, RoundingMode.HALF_UP);
+        return amount.setScale(2, RoundingMode.HALF_EVEN);
     }
 }
